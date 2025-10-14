@@ -4,22 +4,15 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    Transform transform;
-    public float horizontalVelocity = 3f;
-    public float verticalVelocity = 3f;
     public float velocity = 5f;
-    Rigidbody2D rb;
-    bool enElSuelo = false;
-    public float jumpForce = 0.1f;
-    public float jumpVelocity = 0.1f;
-    public Collider2D feetCollider;
+    public float jumpForce = 5f;
+    public float rayLength = 0.5f;
+    public Transform estaEnSuelo;
     public LayerMask groundLayer;
-    Animator animator;
+    Rigidbody2D rb;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        feetCollider = GetComponent<Collider2D>();
-        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -32,20 +25,11 @@ public class PlayerController : MonoBehaviour
     {
         rb.velocity = new Vector2(inputMovimiento * velocity, rb.velocity.y);
 
-        enElSuelo = feetCollider.IsTouchingLayers(groundLayer);
-        if (enElSuelo && Input.GetKey(KeyCode.Space))
+        RaycastHit2D hit = Physics2D.Raycast(estaEnSuelo.position, Vector2.down, rayLength, groundLayer);
+        if (hit.collider != null && Input.GetKeyDown(KeyCode.Space))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            enElSuelo = false;
         }
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-
-        if (collision.gameObject.CompareTag("Suelo"))
-        {
-            enElSuelo = true;
-        }
-    }
 }
