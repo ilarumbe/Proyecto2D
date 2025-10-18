@@ -122,7 +122,7 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: coins-chests-etc-2-0
+  - name: coin
     originalName: 
     pivot: {x: 0.5, y: -0.013671875}
     alignment: 9
