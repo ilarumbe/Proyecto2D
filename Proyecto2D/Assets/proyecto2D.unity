@@ -5273,6 +5273,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1079734748941430022, guid: dde003a0a00483847adf505bd748542a, type: 3}
+      propertyPath: estelaPrefab
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1079734748941430022, guid: dde003a0a00483847adf505bd748542a, type: 3}
       propertyPath: walkParticles
       value: 
       objectReference: {fileID: 770787830}
