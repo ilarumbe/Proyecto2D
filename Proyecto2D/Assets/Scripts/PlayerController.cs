@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     private float dashTimer;
     private Vector3 dashStartPos;
     private Vector3 dashEndPos;
-    private bool puedeDashear = true;
+    public bool puedeDashear = true;
     private bool dashHaciaArriba = false;
 
     // PARTICULAS
@@ -184,7 +184,6 @@ public class PlayerController : MonoBehaviour
         {
             ghostTimer += Time.deltaTime;
 
-            // Crear fantasma en intervalos regulares
             if (ghostTimer >= ghostInterval)
             {
                 CrearFantasma();
@@ -197,39 +196,30 @@ public class PlayerController : MonoBehaviour
     {
         if (ghostPrefab == null) return;
 
-        // Instanciar el fantasma
         GameObject ghost = Instantiate(ghostPrefab, transform.position, transform.rotation);
-        
-        // Configurar la escala y rotación igual al personaje
+
         ghost.transform.localScale = transform.localScale;
-        
-        // Obtener el SpriteRenderer del fantasma
+
         SpriteRenderer ghostSprite = ghost.GetComponent<SpriteRenderer>();
         SpriteRenderer playerSprite = GetComponent<SpriteRenderer>();
-        
+
         if (ghostSprite != null && playerSprite != null)
         {
-            // Copiar el sprite actual del jugador
             ghostSprite.sprite = playerSprite.sprite;
 
-            // Aplicar color azul claro transparente
-            Color azulClaro = new Color(0.4f, 0.9f, 1f, 0.8f); // Azul más saturado
+            Color azulClaro = new Color(0.4f, 0.9f, 1f, 0.5f);
             ghostSprite.color = azulClaro;
-            
-            // Orden en capa (detrás del jugador)
+
             ghostSprite.sortingOrder = playerSprite.sortingOrder - 1;
         }
-
-        // Añadir a la lista de fantasmas activos
+        
         activeGhosts.Add(ghost);
         
-        // Configurar destrucción automática con desvanecimiento
         StartCoroutine(FadeAndDestroyGhost(ghost, ghostLifetime));
     }
     
     void LimpiarFantasmas()
     {
-        // Destruir todos los fantasmas activos
         foreach (GameObject ghost in activeGhosts)
         {
             if (ghost != null)
@@ -244,7 +234,7 @@ public class PlayerController : MonoBehaviour
     {
         SpriteRenderer ghostSprite = ghost.GetComponent<SpriteRenderer>();
         float timer = lifetime;
-        Color originalColor = ghostSprite.color; // Guardar el color azul original
+        Color originalColor = ghostSprite.color;
 
         while (timer > 0f)
         {
@@ -252,7 +242,6 @@ public class PlayerController : MonoBehaviour
             
             if (ghostSprite != null)
             {
-                // Desvanecer gradualmente manteniendo el color azul
                 Color newColor = originalColor;
                 newColor.a = originalColor.a * (timer / lifetime);
                 ghostSprite.color = newColor;
@@ -261,7 +250,6 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
 
-        // Remover de la lista antes de destruir
         if (activeGhosts.Contains(ghost))
         {
             activeGhosts.Remove(ghost);
@@ -269,17 +257,26 @@ public class PlayerController : MonoBehaviour
         
         Destroy(ghost);
     }
-    
-     void CreateDefaultGhostPrefab()
+
+    void CreateDefaultGhostPrefab()
     {
-        // Crear un prefab básico para el fantasma si no se asignó uno
         ghostPrefab = new GameObject("DefaultGhost");
         SpriteRenderer sr = ghostPrefab.AddComponent<SpriteRenderer>();
-        
-        // Hacerlo no persistente
+
         ghostPrefab.hideFlags = HideFlags.HideInHierarchy;
-        
+
         Debug.Log("Se creó un prefab de fantasma por defecto");
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("BlueBall"))
+        {
+            puedeDashear = true;
+            Destroy(other.gameObject);
+        }
+    }
+    
+
 
 }
