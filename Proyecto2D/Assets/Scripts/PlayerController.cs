@@ -41,6 +41,15 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
 
+        Collider2D collider = GetComponent<Collider2D>();
+        if (collider != null)
+        {
+            PhysicsMaterial2D playerMaterial = new PhysicsMaterial2D();
+            playerMaterial.friction = 0f;
+            playerMaterial.bounciness = 0f;
+            collider.sharedMaterial = playerMaterial;
+        }
+
         if (ghostPrefab == null)
         {
             CreateDefaultGhostPrefab();
@@ -280,13 +289,22 @@ public class PlayerController : MonoBehaviour
             Destroy(other.gameObject);
         }
     }
-    
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (estaDasheando)
         {
             TerminarDash();
         }
+        
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+            if (Mathf.Abs(contact.normal.x) > 0.7f)
+            {
+                rb.position += contact.normal * 0.02f;
+            }
+        }
     }
+
 
 }
