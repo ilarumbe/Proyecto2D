@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float velocity = 10f;
-    public float jumpForce = 5f;
+    public float velocity = 7f;
+    public float jumpForce = 7f;
     public float rayLength = 0.5f;
     public Transform estaEnSuelo;
     public LayerMask groundLayer;
@@ -146,10 +146,13 @@ public class PlayerController : MonoBehaviour
         if (estaDasheando)
         {
             dashTimer += Time.deltaTime;
-            float t = dashTimer / dashDuration;
-            transform.position = Vector3.Lerp(dashStartPos, dashEndPos, t);
 
-            if (t >= 1f)
+            Vector2 dir = dashDirection.normalized;
+            float dashSpeed = dashDistance / dashDuration;
+
+            rb.velocity = dir * dashSpeed;
+
+            if (dashTimer >= dashDuration)
             {
                 TerminarDash();
             }
@@ -159,6 +162,7 @@ public class PlayerController : MonoBehaviour
     void TerminarDash()
     {
         estaDasheando = false;
+        rb.velocity = Vector2.zero;
         rb.gravityScale = 1;
         animator.SetBool("dash", false);
         LimpiarFantasmas();
@@ -277,6 +281,12 @@ public class PlayerController : MonoBehaviour
         }
     }
     
-
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (estaDasheando)
+        {
+            TerminarDash();
+        }
+    }
 
 }
