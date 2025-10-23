@@ -183,11 +183,20 @@ public class PlayerController : MonoBehaviour
 
         if (enSuelo && Mathf.Abs(input) > 0.1f && !estaDasheando)
         {
-            if (!walkParticles.isPlaying) walkParticles.Play();
+            if (!walkParticles.isPlaying)
+            {
+                walkParticles.Play();
+                walkParticles.gameObject.SetActive(true);
+            }
+            
         }
         else
         {
-            if (walkParticles.isPlaying) walkParticles.Stop();
+            if (walkParticles.isPlaying)
+            {
+                walkParticles.Stop();
+                walkParticles.gameObject.SetActive(false);
+            }
         }
     }
 
