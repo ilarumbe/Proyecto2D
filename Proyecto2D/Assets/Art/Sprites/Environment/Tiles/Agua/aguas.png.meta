@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e21e512ecf696ff4dad46b91d3937e1a
+guid: 3b78ef68e7e0bdb458f0b101cbc102f8
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -95,7 +95,70 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: aguas_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1020
+        width: 1280
+        height: 488
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bae35a10787a5ad4da95dd0a9df892f6
+      internalID: -865704520
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aguas_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 508
+        width: 1280
+        height: 488
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97eeaca0d1b9000468a80cf746b0e738
+      internalID: 834216482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aguas_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1280
+        height: 484
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb5a28a50700fe2409ae25d6021af639
+      internalID: -810428265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -106,7 +169,10 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      aguas_0: -865704520
+      aguas_1: 834216482
+      aguas_2: -810428265
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
