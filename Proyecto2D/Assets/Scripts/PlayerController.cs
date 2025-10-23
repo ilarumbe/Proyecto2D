@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,11 +36,15 @@ public class PlayerController : MonoBehaviour
     public float ghostLifetime = 0.3f;
     private List<GameObject> activeGhosts = new List<GameObject>();
 
+    //MUERTE
+    private Vector3 posicionInicial;
+    private bool estaMuriendo = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        posicionInicial = transform.position;
 
         Collider2D collider = GetComponent<Collider2D>();
         if (collider != null)
@@ -59,6 +64,9 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         float inputMovimiento = Input.GetAxis("Horizontal");
+
+        if (estaMuriendo)
+        return;
 
         if (!estaDasheando)
         {
@@ -297,6 +305,10 @@ public class PlayerController : MonoBehaviour
             puedeDashear = true;
             Destroy(other.gameObject);
         }
+        if (other.CompareTag("BloqueMuerte") && !estaMuriendo)
+        {
+            StartCoroutine(MorirYReaparecer());
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -305,7 +317,7 @@ public class PlayerController : MonoBehaviour
         {
             TerminarDash();
         }
-        
+
         foreach (ContactPoint2D contact in collision.contacts)
         {
             if (Mathf.Abs(contact.normal.x) > 0.7f)
@@ -313,6 +325,28 @@ public class PlayerController : MonoBehaviour
                 rb.position += contact.normal * 0.02f;
             }
         }
+    }
+    
+    private IEnumerator MorirYReaparecer()
+    {
+        estaMuriendo = true;
+
+        animator.SetTrigger("muerte");
+
+        rb.velocity = Vector2.zero;
+        rb.gravityScale = 0;
+        GetComponent<Collider2D>().enabled = false;
+
+        yield return new WaitForSeconds(0.5f);
+
+        transform.position = posicionInicial;
+
+        GetComponent<Collider2D>().enabled = true;
+        rb.gravityScale = 1;
+        rb.velocity = Vector2.zero;
+        estaMuriendo = false;
+
+        animator.Play("Idle");
     }
 
 
