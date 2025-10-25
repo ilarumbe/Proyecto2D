@@ -309,6 +309,11 @@ public class PlayerController : MonoBehaviour
         {
             StartCoroutine(MorirYReaparecer());
         }
+        if (other.CompareTag("Cristal"))
+        {
+            FindObjectOfType<GameManager>().SumarCristales(1);
+            Destroy(other.gameObject);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -338,6 +343,8 @@ public class PlayerController : MonoBehaviour
         GetComponent<Collider2D>().enabled = false;
 
         yield return new WaitForSeconds(0.5f);
+
+        FindObjectOfType<GameManager>().SumarMuerte();
 
         transform.position = posicionInicial;
 

@@ -12,7 +12,6 @@ public class TamanoFondo : MonoBehaviour
         float height = Camera.main.orthographicSize * 2f;
         float width = height * Camera.main.aspect;
 
-        // Escala del sprite
         Vector2 spriteSize = sr.sprite.bounds.size;
 
         transform.localScale = new Vector3(

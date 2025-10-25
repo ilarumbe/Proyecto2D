@@ -5,10 +5,13 @@ using UnityEngine;
 
 public class HUDController : MonoBehaviour
 {
-    public GameManager gameManager;
     public TextMeshProUGUI cristales;
     void Update()
     {
-        cristales.text = gameManager.Cristales.ToString();
+        if (GameManager.instancia != null && cristales != null)
+        {
+            cristales.text = "Cristales: " + GameManager.instancia.cristales.ToString();
+        }
+            
     }
 }

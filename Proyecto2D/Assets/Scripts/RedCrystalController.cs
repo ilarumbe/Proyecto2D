@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class RedCrystalController : MonoBehaviour
 {
+    private bool recogido = false;
     public int valor = 1;
-    public GameManager gameManager;
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-        {
-            gameManager.SumarCristales(valor);
-            Destroy(gameObject);
-        }
+        if (!other.CompareTag("Player")) return;
+        if (recogido) return;
+
+        recogido = true;
+        Destroy(gameObject);
     }
 }

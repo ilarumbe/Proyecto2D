@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7876329493001668355}
   m_Layer: 0
   m_Name: RedCrystal
-  m_TagString: Untagged
+  m_TagString: Cristal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -120,6 +120,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72d986a5249369640a9e5ce5a63744a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  valor: 1
+  gameManager: {fileID: 0}
 --- !u!61 &7876329493001668355
 BoxCollider2D:
   m_ObjectHideFlags: 0
