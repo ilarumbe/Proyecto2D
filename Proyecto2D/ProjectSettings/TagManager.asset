@@ -8,6 +8,7 @@ TagManager:
   - BlueBall
   - BloqueMuerte
   - Cristal
+  - Hielo
   layers:
   - Default
   - TransparentFX

@@ -39,6 +39,17 @@ public class PlayerController : MonoBehaviour
     //MUERTE
     private Vector3 posicionInicial;
     private bool estaMuriendo = false;
+    private List<GameObject> blueBalls = new List<GameObject>();
+
+    //HIELO
+    private bool enHielo = false;
+    public float friccionNormal = 20f;
+    public float friccionHielo = 2f;
+    private float velocidadSuavizada = 0f;
+
+    //SONIDO
+    public AudioSource audioPasos;
+    public float velocidadMinimaPasos = 0.1f;
 
     void Start()
     {
@@ -59,6 +70,8 @@ public class PlayerController : MonoBehaviour
         {
             CreateDefaultGhostPrefab();
         }
+
+        blueBalls.AddRange(GameObject.FindGameObjectsWithTag("BlueBall"));
     }
 
     void Update()
@@ -90,8 +103,28 @@ public class PlayerController : MonoBehaviour
 
     void GestionarMovimiento(float input)
     {
-        rb.velocity = new Vector2(input * velocity, rb.velocity.y);
-        animator.SetBool("enMovimiento", input != 0);
+        float friccionActual = enHielo ? friccionHielo : friccionNormal;
+
+        if (input != 0)
+            velocidadSuavizada = Mathf.MoveTowards(velocidadSuavizada, input * velocity, friccionActual * Time.deltaTime);
+        else
+            velocidadSuavizada = Mathf.MoveTowards(velocidadSuavizada, 0, friccionActual * Time.deltaTime);
+
+        rb.velocity = new Vector2(velocidadSuavizada, rb.velocity.y);
+
+        bool enMovimiento = Mathf.Abs(velocidadSuavizada) > velocidadMinimaPasos && enSuelo && !estaDasheando;
+        animator.SetBool("enMovimiento", enMovimiento);
+
+        if (enMovimiento)
+        {
+            if (!audioPasos.isPlaying)
+                audioPasos.Play();
+        }
+        else
+        {
+            if (audioPasos.isPlaying)
+                audioPasos.Stop();
+        }
     }
 
     void GestionarGiro(float input)
@@ -294,8 +327,6 @@ public class PlayerController : MonoBehaviour
         SpriteRenderer sr = ghostPrefab.AddComponent<SpriteRenderer>();
 
         ghostPrefab.hideFlags = HideFlags.HideInHierarchy;
-
-        Debug.Log("Se creó un prefab de fantasma por defecto");
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -303,7 +334,7 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("BlueBall"))
         {
             puedeDashear = true;
-            Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
         }
         if (other.CompareTag("BloqueMuerte") && !estaMuriendo)
         {
@@ -331,6 +362,18 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    private void OnCollisionStay2D(Collision2D collision)
+{
+    if (collision.collider.CompareTag("Hielo"))
+        enHielo = true;
+}
+
+private void OnCollisionExit2D(Collision2D collision)
+{
+    if (collision.collider.CompareTag("Hielo"))
+        enHielo = false;
+}
     
     private IEnumerator MorirYReaparecer()
     {
@@ -347,6 +390,14 @@ public class PlayerController : MonoBehaviour
         FindObjectOfType<GameManager>().SumarMuerte();
 
         transform.position = posicionInicial;
+
+        foreach (GameObject b in blueBalls)
+        {
+            if (b != null)
+            {
+                b.SetActive(true);
+            }
+        }
 
         GetComponent<Collider2D>().enabled = true;
         rb.gravityScale = 1;
